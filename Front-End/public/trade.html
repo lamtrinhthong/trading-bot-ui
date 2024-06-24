@@ -1,0 +1,32 @@
+<div id="trade-content">
+    <h2>Trade</h2>
+    <label>Select Symbol:</label>
+    <select>
+      <option value="AAPL">AAPL</option>
+      <option value="TSLA">TSLA</option>
+    </select>
+    <div className="chart">Price Chart (Candlestick Chart)</div>
+    <div className="order-book">
+      <div className="buy-orders">
+        <h3>Buy Orders</h3>
+        <p>10 @ $149.50</p>
+        <p>15 @ $149.00</p>
+      </div>
+      <div className="sell-orders">
+        <h3>Sell Orders</h3>
+        <p>5 @ $150.50</p>
+        <p>10 @ $151.00</p>
+      </div>
+    </div>
+    <div className="place-order">
+      <label>Order Type:</label>
+      <select>
+        <option value="market">Market</option>
+        <option value="limit">Limit</option>
+      </select>
+      <input type="number" placeholder="Quantity" />
+      <input type="number" placeholder="Price" />
+      <button onClick="buyCLick">Buy</button>
+      <button onClick="saleClick">Sell</button>
+    </div>
+  </div>
