@@ -1,0 +1,81 @@
+// updatingDataWrapper.js
+
+import React from "react";
+
+function getDisplayName(ChartComponent) {
+    const name = ChartComponent.displayName || ChartComponent.name || "ChartComponent";
+    return name;
+}
+
+export default function updatingDataWrapper(ChartComponent) {
+
+    class UpdatingComponentHOC extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+                data: this.props.data,
+            };
+            this.speed = 1000;
+            this.onKeyPress = this.onKeyPress.bind(this);
+        }
+
+        componentDidMount() {
+            document.addEventListener("keyup", this.onKeyPress);
+        }
+
+        componentWillUnmount() {
+            if (this.interval) clearInterval(this.interval);
+            document.removeEventListener("keyup", this.onKeyPress);
+        }
+
+        onKeyPress(e) {
+            const keyCode = e.which;
+            switch (keyCode) {
+                case 50: // 2 - Start alter data
+                case 49: // 1 - Start Push data
+                    this.func = () => {
+                        if (this.state.length < this.props.data.length) {
+                            this.setState({
+                                length: this.state.length + 1,
+                                data: this.props.data.slice(0, this.state.length + 1),
+                            });
+                        }
+                    };
+                    break;
+                case 27: // ESC - Clear interval
+                    this.func = null;
+                    if (this.interval) clearInterval(this.interval);
+                    break;
+                case 107: // + - Increase the this.speed
+                    this.speed = Math.max(this.speed / 2, 50);
+                    break;
+                case 109: // - - Reduce the this.speed
+                case 189:
+                    const delta = Math.min(this.speed, 1000);
+                    this.speed = this.speed + delta;
+                    break;
+                default:
+                    break;
+            }
+            if (this.func) {
+                if (this.interval) clearInterval(this.interval);
+                this.interval = setInterval(this.func, this.speed);
+            }
+        }
+
+        render() {
+            const { type } = this.props;
+            const { data } = this.state;
+
+            return <ChartComponent ref="component" data={data} type={type} />;
+        }
+    }
+
+    UpdatingComponentHOC.defaultProps = {
+        type: "svg",
+    };
+
+    UpdatingComponentHOC.displayName = `updatingDataWrapper(${ getDisplayName(ChartComponent) })`;
+
+    return UpdatingComponentHOC;
+}

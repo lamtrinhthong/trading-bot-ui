@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'; // Updated imports
+import { Route, Routes, Link } from 'react-router-dom'; // Updated imports
 import LandingPage from './components/LandingPage';
 import Dashboard from './components/Dashboard';
 import Trade from './components/Trade';
